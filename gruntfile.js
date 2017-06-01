@@ -10,11 +10,22 @@ module.exports = function (grunt) {
          files: {
             src: ['js/**/*.js']
          }
+      },
+      coffee: {
+         dist: {
+            files: {
+               'dist/package.js': 'coffee/**/*.coffee'
+            }
+         },
+         options: {
+            sourceMap: true
+         }
       }
    });
 
    grunt.loadNpmTasks('grunt-contrib-jshint');
+   grunt.loadNpmTasks('grunt-contrib-coffee')
 
-   grunt.registerTask('default', ['jshint'])
+   grunt.registerTask('default', ['jshint', 'coffee'])
 
 }
