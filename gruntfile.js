@@ -10,7 +10,7 @@ module.exports = function (grunt) {
    grunt.initConfig({
       jshint: {
          files: {
-            src: ['js/**/*.js']
+            src: ['js/**/*.js', 'test/**/*.js']
          }
       },
       clean: ['dist/**/*'],
@@ -117,7 +117,13 @@ module.exports = function (grunt) {
                open: true
             }
          }
+      },
+      karma: {
+         unit: {
+            configFile:'karma.conf.js'
+         }
       }
+
 
    });
    // las carga automáticamente load-grunt-tasks
@@ -129,6 +135,18 @@ module.exports = function (grunt) {
    // grunt.loadNpmTasks('grunt-contrib-cssmin');
    // grunt.loadNpmTasks('grunt-html-build');
 
-   grunt.registerTask('default', ['jshint','clean', 'coffee', 'sass', 'uglify', 'requirejs', 'cssmin', 'copy', 'htmlbuild:dev', 'connect'])
+   grunt.registerTask('default', ['jshint','clean', 'coffee', 'sass', 'uglify', 'requirejs', 'cssmin', 'copy', 'htmlbuild:dev', 'connect']);
+
+   grunt.registerTask('pre-build', ['jshint','karma','clean', 'coffee', 'sass']);
+
+   grunt.registerTask('compress',['uglify', 'requirejs','cssmin']);
+
+   grunt.registerTask(' compress', ['uglify', 'requirejs', 'cssmin' ]);
+
+   grunt.registerTask('build:dev', ['pre-build', 'compress', 'copy', 'htmlbuild:dev', 'connect' ]);
+
+   grunt.registerTask('build:dist', ['pre-build', 'compress', 'htmlbuild:dist', 'connect']);
+
+
 
 }
