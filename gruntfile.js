@@ -45,6 +45,16 @@ module.exports = function (grunt) {
             sourceMapIn: 'dist/js/package.js.map'
          }
       },
+      requirejs: {
+         dist: {
+            options: {
+               baseUrl: 'js',
+               out: 'dist/js/app.js',
+               include: 'main',
+               name: 'vendor/almond'
+            }
+         }
+      },
       cssmin: {
          dist: {
             files: {
@@ -53,6 +63,20 @@ module.exports = function (grunt) {
          },
          options: {
             sourceMap: true
+         }
+      },
+      copy: {
+         dev: {
+            files: [
+               {
+                  src: 'node_modules/requirejs/require.js',
+                  dest: 'dist/js/vendor/require.js'
+               }, {
+                  expand: true,
+                  src: ['js/**'],
+                  dest: 'dist'
+               }
+            ]
          }
       },
       htmlbuild:{
@@ -74,7 +98,7 @@ module.exports = function (grunt) {
             src: 'index.html',
             dest: 'dist/index.html',
             options: {
-               prefix: 'dist/',
+               // prefix: 'dist/',
                relative: true,
                scripts: {
                   'package': 'dist/js/package.js'
@@ -105,6 +129,6 @@ module.exports = function (grunt) {
    // grunt.loadNpmTasks('grunt-contrib-cssmin');
    // grunt.loadNpmTasks('grunt-html-build');
 
-   grunt.registerTask('default', ['jshint','clean', 'coffee', 'sass', 'uglify', 'cssmin', 'htmlbuild:dist', 'connect'])
+   grunt.registerTask('default', ['jshint','clean', 'coffee', 'sass', 'uglify', 'requirejs', 'cssmin', 'copy', 'htmlbuild:dev', 'connect'])
 
 }
