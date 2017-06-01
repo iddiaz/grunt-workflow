@@ -14,8 +14,18 @@ module.exports = function (grunt) {
       coffee: {
          dist: {
             files: {
-               'dist/package.js': 'coffee/**/*.coffee'
+               'dist/js/package.js': 'coffee/**/*.coffee'
             }
+         },
+         options: {
+            sourceMap: true
+         }
+      },
+      sass: {
+         dist: {
+            files: {
+               'dist/styles/styles.css': 'sass/**/*.scss'
+            }            
          },
          options: {
             sourceMap: true
@@ -24,8 +34,9 @@ module.exports = function (grunt) {
    });
 
    grunt.loadNpmTasks('grunt-contrib-jshint');
-   grunt.loadNpmTasks('grunt-contrib-coffee')
+   grunt.loadNpmTasks('grunt-contrib-coffee');
+   grunt.loadNpmTasks('grunt-sass');
 
-   grunt.registerTask('default', ['jshint', 'coffee'])
+   grunt.registerTask('default', ['jshint', 'coffee', 'sass'])
 
 }
