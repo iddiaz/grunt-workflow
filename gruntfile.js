@@ -4,6 +4,8 @@ var fs = require('fs');
 
 module.exports = function (grunt) {
    'use strict';
+   // carga las tareas automáticamente
+   require('load-grunt-tasks')(grunt);
 
    grunt.initConfig({
       jshint: {
@@ -11,6 +13,7 @@ module.exports = function (grunt) {
             src: ['js/**/*.js']
          }
       },
+      clean: ['dist/**/*'],
       coffee: {
          dist: {
             files: {
@@ -24,7 +27,7 @@ module.exports = function (grunt) {
       sass: {
          dist: {
             files: {
-               'dist/styles/styles.css': 'sass/**/*.scss'
+               'dist/css/styles.css': 'sass/**/*.scss'
             }            
          },
          options: {
@@ -43,24 +46,65 @@ module.exports = function (grunt) {
          }
       },
       cssmin: {
-         dist:{
-            files:{
-               'dist/styles/styles.min.css': 'dist/styles/**/*.css'
+         dist: {
+            files: {
+               'dist/css/styles.min.css': 'dist/css/**/*.css'
             }
          },
          options: {
             sourceMap: true
          }
+      },
+      htmlbuild:{
+         dist: {
+            src: 'index.html',
+            dest: 'dist/index.html',
+            options: {
+               // prefix: 'dist/',
+               relative: true,
+               scripts: {
+                  'package': ['dist/js/package.min.js', 'dist/js/app.js']
+               },
+               styles: {
+                  css: 'dist/css/styles.min.css'
+               }
+            }
+         },
+         dev:{
+            src: 'index.html',
+            dest: 'dist/index.html',
+            options: {
+               prefix: 'dist/',
+               relative: true,
+               scripts: {
+                  'package': 'dist/js/package.js'
+               },
+               styles: {
+                  css: 'dist/css/styles.css'
+               }
+            }
+         }
+      },
+      connect: {
+         server: {
+            options: {
+               base:'./dist/',
+               keepalive: true,
+               open: true
+            }
+         }
       }
 
    });
+   // las carga automáticamente load-grunt-tasks
+   // grunt.loadNpmTasks('grunt-contrib-jshint');
+   // grunt.loadNpmTasks('grunt-contrib-coffee');
+   // grunt.loadNpmTasks('grunt-sass');
+   // grunt.loadNpmTasks('grunt-contrib-uglify');
+   // grunt.loadNpmTasks('grunt-contrib-clean');
+   // grunt.loadNpmTasks('grunt-contrib-cssmin');
+   // grunt.loadNpmTasks('grunt-html-build');
 
-   grunt.loadNpmTasks('grunt-contrib-jshint');
-   grunt.loadNpmTasks('grunt-contrib-coffee');
-   grunt.loadNpmTasks('grunt-sass');
-   grunt.loadNpmTasks('grunt-contrib-uglify');
-   grunt.loadNpmTasks('grunt-contrib-cssmin');
-
-   grunt.registerTask('default', ['jshint', 'coffee', 'sass', 'uglify', 'cssmin' ])
+   grunt.registerTask('default', ['jshint','clean', 'coffee', 'sass', 'uglify', 'cssmin', 'htmlbuild:dist', 'connect'])
 
 }
